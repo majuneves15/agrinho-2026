@@ -1,29 +1,42 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const botaoDeAcessibilidade = document.getElementById('botao-acessibilidade')
-    const opcoesDeAcessibilidade = document.getElementById('opcoes-acessibilidade')
+    // Seletores voltados para o painel de Controle Biológico
+    const botaoControle = document.getElementById('btn-controle-biologico');
+    const painelManejo = document.getElementById('painel-manejo-pragas');
 
-    botaoDeAcessibilidade.addEventListener('click', function (){
-        botaoDeAcessibilidade.classList.toggle('rotacao-botao');
-        opcoesDeAcessibilidade.classList.toggle('apresenta-lista');
+    // Alternar a exibição do painel de controle de pragas
+    botaoControle.addEventListener('click', function () {
+        botaoControle.classList.toggle('rotacao-icone');
+        painelManejo.classList.toggle('exibir-painel');
 
-        const botaoSelecionado = botaoDeAcessibilidade.getAttribute('aria-expanded') === 'true';
-        botaoDeAcessibilidade.setAttribute('aria-expanded', !botaoSelecionado);
-    })
+        // Correção da acessibilidade: convertendo o booleano explicitamente para string
+        const estaExpandido = botaoControle.getAttribute('aria-expanded') === 'true';
+        botaoControle.setAttribute('aria-expanded', String(!estaExpandido));
+    });
     
-    const aumentaFonteBotao = document.getElementById('aumentar-fonte');
-    const diminuiFonteBotao = document.getElementById('diminuir-fonte');
-    const alternaContraste = document.getElementById('alterna-contraste');
+    // Controles de monitoramento e dados
+    const btnAumentarDados = document.getElementById('btn-aumentar-dados');
+    const btnDiminuirDados = document.getElementById('btn-diminuir-dados');
+    const btnModoNoturno = document.getElementById('btn-modo-noturno'); // Antigo alto-contraste, útil para campo à noite
 
-    let tamanhoAtualFonte = 1;
-    aumentaFonteBotao.addEventListener('click', function(){
-        tamanhoAtualFonte += 0.1;
-        document.body.style.fontSize = `${tamanhoAtualFonte}rem`;
-    })
-    diminuiFonteBotao.addEventListener('click', function(){
-        tamanhoAtualFonte -= 0.1;
-        document.body.style.fontSize = `${tamanhoAtualFonte}rem`;
-    })
-    alternaContraste.addEventListener('click', function(){
-         document.body.classList.toggle('alto-contraste');
-    })
-})
+    let escalaVisual = 1;
+
+    // Aumentar o tamanho do texto do monitoramento
+    btnAumentarDados.addEventListener('click', function () {
+        escalaVisual += 0.1;
+        document.body.style.fontSize = `${escalaVisual}rem`;
+    });
+
+    // Diminuir o tamanho do texto do monitoramento
+    btnDiminuirDados.addEventListener('click', function () {
+        // Evita que a fonte diminua demais e fique ilegível
+        if (escalaVisual > 0.5) {
+            escalaVisual -= 0.1;
+            document.body.style.fontSize = `${escalaVisual}rem`;
+        }
+    });
+
+    // Alternar para modo leitura noturna (comum em monitoramento de campo)
+    btnModoNoturno.addEventListener('click', function () {
+         document.body.classList.toggle('modo-campo-noturno');
+    });
+});
